@@ -11,7 +11,7 @@
 2. **Create a virtual environment and activate it**:
     ```sh
     python -m venv venv
-    On Windows use `venv\Scripts\activate`
+    source  venv\Scripts\activate
     ```
 
 3. **Install dependencies**:
