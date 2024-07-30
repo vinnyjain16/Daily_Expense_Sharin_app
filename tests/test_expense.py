@@ -1,28 +1,26 @@
-# tests/test_expense.py
-from tests import BaseTestCase
+import unittest
+from app import create_app
+from app.database import db
 from app.models import User, Expense, Split
 
-class ExpenseTestCase(BaseTestCase):
+class ExpenseTestCase(unittest.TestCase):
+    def setUp(self):
+        self.app = create_app()
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+        db.create_all()
+        self.client = self.app.test_client()
 
-    def test_add_expense(self):
-        user = User(email='test@example.com', name='Test User', mobile='1234567890')
-        db.session.add(user)
-        db.session.commit()
-
-        response = self.client.post('/expense', json={
-            'description': 'Dinner',
-            'total_amount': 3000,
-            'split_method': 'equal',
-            'date': '2023-07-28',
-            'user_id': user.id,
-            'splits': [
-                {'amount': 1500, 'user_id': user.id},
-                {'amount': 1500, 'user_id': user.id}
-            ]
+        self.client.post('/api/users', json={
+            'email': 'user1@example.com',
+            'name': 'User One',
+            'mobile': '1234567890'
         })
-        self.assertEqual(response.status_code, 201)
-
-    # Add more test methods as needed
+        self.client.post('/api/users', json={
+            'email': 'user2@example.com',
+            'name': 'User Two',
+            'mobile': '0987654321'
+        })
 
     def tearDown(self):
         db.session.remove()
@@ -30,18 +28,17 @@ class ExpenseTestCase(BaseTestCase):
         self.app_context.pop()
 
     def test_add_expense(self):
-        response = self.client.post('/expense', json={
-            'description': 'Dinner',
-            'total_amount': 3000,
+        response = self.client.post('/api/expenses', json={
+            'user_id': 1,
+            'description': 'Groceries',
+            'total_amount': 500,
             'split_method': 'equal',
-            'date': '2023-07-28',
-            'user_id': self.user1.id,
             'splits': [
-                {'amount': 1500, 'user_id': self.user1.id},
-                {'amount': 1500, 'user_id': self.user2.id}
+                {'user_id': 1, 'amount': 250},
+                {'user_id': 2, 'amount': 250}
             ]
         })
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
 
 if __name__ == '__main__':
     unittest.main()
