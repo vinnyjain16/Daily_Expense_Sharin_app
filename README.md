@@ -4,8 +4,8 @@
 
 1. **Clone the repository**:
     ```sh
-    git clone <repository_url>
-    cd daily-expenses-app
+    git clone https://github.com/vinnyjain16/Daily_Expense_Sharin_app.git
+    cd Daily_Expense_Sharin_app
     ```
 
 2. **Create a virtual environment and activate it**:
