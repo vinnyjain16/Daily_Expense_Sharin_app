@@ -56,6 +56,4 @@ The configuration is managed through the `config.py` file. You can set environme
 - **Routes**: Located in `app/routes.py`.
 - **Tests**: Located in the `tests` directory.
 
-## License
 
-This project is licensed under the MIT License.
